@@ -12,22 +12,33 @@ distance_matrix = cdist(cities, cities, metric='euclidean')
 # 求解
 from method import (
     calculate_total_distance,
-    greedy_tsp, 
-    simulated_annealing
+    simulated_annealing,
+    greedy_algorithm, 
+    genetic_algorithm
 )
 # method = 'Greedy Algorithm'
-# tour = greedy_tsp(distance_matrix)
+# best_tour = greedy_algorithm(distance_matrix)
+# best_distance = calculate_total_distance(best_tour, distance_matrix)
 
-method = 'Simulated Annealing'
-tour = simulated_annealing(
-    distance_matrix, 
-    initial_temp=10, 
-    cooling_rate=0.995, 
-    max_iter=10000
+# method = 'Simulated Annealing'
+# best_tour, best_distance = simulated_annealing(
+#     distance_matrix, 
+#     initial_temp=5, 
+#     cooling_rate=0.995, 
+#     max_iter=10000
+# )
+
+method = 'Genetic Algorithm'
+best_tour, best_distance = genetic_algorithm(
+    distance_matrix,
+    pop_size=200,
+    elite_size=40,
+    mutation_rate=0.01,
+    generations=500
 )
 
-# 可视化
-total_distance = calculate_total_distance(tour, distance_matrix)
 from plot import plot_tsp_solution
-plot_tsp_solution(cities, tour, total_distance, method)
+plot_tsp_solution(cities, best_tour, best_distance, method)
+print(f"Best Tour: {best_tour}")
+print(f"Best Distance: {best_distance}")
 
