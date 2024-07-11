@@ -4,7 +4,7 @@ from scipy.spatial.distance import cdist
 
 # 生成随机城市坐标
 np.random.seed(42)
-num_cities = 10
+num_cities = 20
 cities = np.random.rand(num_cities, 2)
 
 # 计算城市之间的距离矩阵
@@ -30,16 +30,20 @@ tour = greedy_tsp(distance_matrix)
 plt.figure(figsize=(8, 6))
 plt.scatter(cities[:, 0], cities[:, 1], c='red', marker='o')
 
-# 绘制路径
+# 绘制路径并添加箭头
 for i in range(len(tour) - 1):
     start, end = tour[i], tour[i + 1]
-    plt.plot([cities[start, 0], cities[end, 0]], [cities[start, 1], cities[end, 1]], 'b-')
+    plt.arrow(
+        cities[start, 0], cities[start, 1], 
+        cities[end, 0] - cities[start, 0], cities[end, 1] - cities[start, 1],
+        head_width=0.02, length_includes_head=True, color='blue'
+    )
 
 # 显示城市编号
 for i, (x, y) in enumerate(cities):
     plt.text(x, y, str(i), fontsize=12, ha='right')
 
-plt.title('Traveling Salesman Problem Solution using Greedy Algorithm')
+plt.title('Traveling Salesman Problem Solution using Greedy Algorithm with Arrows')
 plt.xlabel('X Coordinate')
 plt.ylabel('Y Coordinate')
 plt.grid(True)
