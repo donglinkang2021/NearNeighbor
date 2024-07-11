@@ -21,7 +21,7 @@ from method import (
 method = 'Simulated Annealing'
 tour = simulated_annealing(
     distance_matrix, 
-    initial_temp=3000, 
+    initial_temp=10, 
     cooling_rate=0.995, 
     max_iter=10000
 )
