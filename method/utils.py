@@ -1,13 +1,31 @@
 import numpy as np
 from scipy.spatial.distance import cdist
 from typing import List, Tuple
+import math
 
 __all__ = [
     'euclidean_distance',
     'calculate_total_distance',
     'calculate_distance_matrix',
-    'kmeans'
+    'kmeans',
+    'neighbor_aggregation',
+    'softmax',
+    'normalize',
 ]
+
+def neighbor_aggregation(x:np.ndarray) -> np.ndarray:
+    dist_matrix = euclidean_distance(x, x)
+    dist_matrix = softmax(dist_matrix, axis=-1)
+    return dist_matrix @ x
+
+def softmax(x:np.ndarray, axis:int=-1) -> np.ndarray:
+    exp_x = np.exp(x - np.max(x, axis=axis, keepdims=True))
+    return exp_x / exp_x.sum(axis=axis, keepdims=True)
+
+def normalize(x:np.ndarray, axis:int=-1, epsilon:float=1e-8) -> np.ndarray:
+    mean = x.mean(axis=axis, keepdims=True)
+    std = x.std(axis=axis, keepdims=True)
+    return (x - mean) / (std + epsilon)
 
 def euclidean_distance(X:np.ndarray, Y:np.ndarray) -> np.ndarray:
     return cdist(X, Y, metric='euclidean')
