@@ -2,11 +2,14 @@ import numpy as np
 from .utils import calculate_total_distance
 from typing import List, Tuple
 
+__all__ = ['simulated_annealing']
+
 def simulated_annealing(
         distance_matrix: np.ndarray, 
         initial_temp: float = 1000, 
         cooling_rate: float = 0.995, 
-        max_iter: int = 10000
+        max_iter: int = 10000,
+        is_print: bool = True
     ) -> Tuple[List[int], float]:
     num_cities = distance_matrix.shape[0]
     tour = list(np.random.permutation(range(1, num_cities)))
@@ -42,7 +45,7 @@ def simulated_annealing(
         # update temperature
         temperature *= cooling_rate
 
-        if i % 200 == 0:
+        if is_print and i % 200 == 0:
             print(f"Iteration {i+1}/{max_iter}, Best Distance: {best_distance}")
     
     return best_tour, best_distance

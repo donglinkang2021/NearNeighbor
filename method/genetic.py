@@ -25,6 +25,7 @@ import numpy as np
 from .utils import calculate_total_distance
 from typing import List, Tuple
 
+__all__ = ['genetic_algorithm']
 
 def initialize_population(
         pop_size: int, 
@@ -85,6 +86,9 @@ def mutate(
         mutation_rate: float
     ) -> List[int]:
     """swap two cities with a probability"""
+    if len(tour) <= 2:
+        return tour
+
     for i in range(len(tour) - 1):
         if np.random.rand() < mutation_rate:
             j = np.random.randint(0, len(tour) - 2)
@@ -96,7 +100,8 @@ def genetic_algorithm(
         pop_size: int = 100, 
         elite_size: int = 20, 
         mutation_rate: float = 0.01, 
-        generations: int = 500
+        generations: int = 500,
+        is_print: bool = True
     ) -> Tuple[List[int], float]:
     num_cities = distance_matrix.shape[0]
     population = initialize_population(pop_size, num_cities)
@@ -130,6 +135,7 @@ def genetic_algorithm(
                 best_distance = distance
                 best_tour = tour
 
-        print(f"Generation {generation+1}/{generations}, Best Distance: {best_distance}")
+        if is_print:
+            print(f"Generation {generation+1}/{generations}, Best Distance: {best_distance}")
 
     return best_tour, best_distance

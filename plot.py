@@ -7,7 +7,7 @@ def plot_tsp_solution(
         method: str,
     ):
     # 可视化TSP路径
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(10, 10))
     plt.scatter(cities[:, 0], cities[:, 1], c='red', marker='o')
 
     # 绘制路径并添加箭头
@@ -33,3 +33,4 @@ def plot_tsp_solution(
     plt.ylabel('Y Coordinate')
     plt.grid(True)
     plt.savefig(f"images/{title.replace(' ', '_')}.png")
+    print(f"Plot saved as images/{title.replace(' ', '_')}.png")
