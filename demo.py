@@ -25,7 +25,7 @@ def main():
     data = np.random.uniform(size=(dataset_size, tsp_size, 2)).astype(np.float32)
 
     pbar = tqdm(total=dataset_size, desc='Processing', dynamic_ncols=True)
-    scale_num = 30
+    scale_num = 50
     result_list = []
     agg_result_list = []
     for i in range(dataset_size):

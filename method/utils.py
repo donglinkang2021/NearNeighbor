@@ -11,10 +11,11 @@ __all__ = [
     'neighbor_aggregation',
     'softmax',
     'normalize',
+    'calc_avg_time',
 ]
 
 def neighbor_aggregation(x:np.ndarray) -> np.ndarray:
-    dist_matrix = euclidean_distance(x, x)
+    dist_matrix = cdist(x, x, metric='euclidean')
     dist_matrix = softmax(dist_matrix, axis=-1)
     return dist_matrix @ x
 
@@ -35,6 +36,19 @@ def calculate_total_distance(
         distance_matrix: np.ndarray
     ) -> float:
     return sum(distance_matrix[tour[i], tour[i + 1]] for i in range(len(tour) - 1))
+
+def calc_avg_time(
+        tour:List[int], 
+        distance_matrix:np.ndarray
+    ) -> Tuple[float, float]:
+    arrival_time = {i: 0 for i in range(distance_matrix.shape[0])}
+    total_time = 0
+    for i in range(len(tour) - 1):
+        start, end = tour[i], tour[i + 1]
+        total_time = arrival_time[start] + distance_matrix[start, end]
+        arrival_time[end] = total_time
+    avg_time = np.mean(list(arrival_time.values()))
+    return avg_time, total_time
 
 def calculate_distance_matrix(cities: np.ndarray) -> np.ndarray:
     return euclidean_distance(cities, cities)
