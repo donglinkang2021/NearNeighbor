@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import matplotlib
 from typing import List
 from method import calc_avg_time
+from pathlib import Path
+Path("images").mkdir(exist_ok=True)
 
 def plot_tsp_solution(
         cities: np.ndarray, 
@@ -52,7 +54,8 @@ def plot_cities(cities:np.ndarray, title:str):
     plt.xlabel('X Coordinate')
     plt.ylabel('Y Coordinate')
     plt.grid()
-    img_name = f'images/cities_{title}.png'
+    Path("images/cities").mkdir(exist_ok=True)
+    img_name = f'images/cities/{title}.png'
     plt.savefig(img_name)
     print(f'{img_name} saved')
 
@@ -82,7 +85,8 @@ def plot_transform(cities:np.ndarray, cities_changed:np.ndarray, title:str):
     plt.xlabel('X Coordinate')
     plt.ylabel('Y Coordinate')
     plt.grid()
-    img_name = f'images/transform_{title}.png'
+    Path("images/transform").mkdir(exist_ok=True)
+    img_name = f'images/transform/{title}.png'
     plt.savefig(img_name)
     print(f'{img_name} saved')
 
@@ -107,6 +111,7 @@ def plot_route(cities:np.ndarray, distance_matrix_city:np.ndarray, route:List[in
     plt.xlabel('X Coordinate')
     plt.ylabel('Y Coordinate')
     plt.grid()
-    img_name = f'images/route_{title}.png'
+    Path("images/route").mkdir(exist_ok=True)
+    img_name = f'images/route/{title}.png'
     plt.savefig(img_name)
     print(f'{img_name} saved')
