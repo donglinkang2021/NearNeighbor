@@ -24,7 +24,7 @@ def euclidean_dist(cities:np.ndarray) -> np.ndarray:
 
 def neighbor_aggregation(cities:np.ndarray) -> np.ndarray:
     # note that the input cities should be normalized
-    dist_matrix = attention_dist(cities)
+    dist_matrix = cosine_dist(cities)
     weight = softmax(dist_matrix)
     cities = weight @ cities
     cities = normalize(cities, 0)

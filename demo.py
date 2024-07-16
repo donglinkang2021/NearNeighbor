@@ -4,21 +4,13 @@ from method import TSPMethod, solve, calc_avg_time, neighbor_aggregation, normal
 from typing import List, Tuple
 from tqdm import tqdm
 
-def solve_tsp(cities: np.ndarray, is_agg:bool = True, is_norm:bool = True) -> Tuple[List[int], float]:
-    if is_agg == True and is_norm == True:
-        transform_cities = neighbor_aggregation(normalize(cities, axis=0))
-    elif is_agg == True and is_norm == False:
-        transform_cities = neighbor_aggregation(cities)
-    elif is_agg == False and is_norm == True:
-        transform_cities = normalize(cities, axis=0)
-    else:
-        transform_cities = cities
-    distance_matrix = cdist(transform_cities, transform_cities, metric='euclidean')
-    method = TSPMethod.NEAREST_NEIGHBOR
-    best_tour = solve(distance_matrix, method)
-
+def solve_tsp(cities: np.ndarray, is_agg:bool = True) -> Tuple[List[int], float]:
+    distance_matrix_origin = cdist(cities, cities, metric='euclidean')
+    if is_agg:
+        cities = neighbor_aggregation(normalize(cities, axis=0))
     distance_matrix = cdist(cities, cities, metric='euclidean')
-    avg_time, total_time = calc_avg_time(best_tour, distance_matrix)
+    best_tour = solve(distance_matrix)
+    avg_time, total_time, _ = calc_avg_time(best_tour, distance_matrix_origin)
     return best_tour, avg_time, total_time
 
 def main():
@@ -33,23 +25,24 @@ def main():
     result = {
         'original': [],
         'agg': [],
-        'norm': [],
-        'agg_norm': []
     }
     for i in range(dataset_size):
         cities = data[i][:scale_num]
 
-        best_tour, avg_time, total_time = solve_tsp(cities, is_agg=False, is_norm=False)
-        result['original'].append({'tour': best_tour, 'avg_time': avg_time, 'total_time': total_time})
+        best_tour, avg_time, total_time = solve_tsp(cities, is_agg=False)
+        result['original'].append({
+            'tour': best_tour, 
+            'avg_time': avg_time, 
+            'total_time': total_time
+        })
 
-        best_tour, avg_time, total_time = solve_tsp(cities, is_agg=False, is_norm=True)
-        result['norm'].append({'tour': best_tour, 'avg_time': avg_time, 'total_time': total_time})
+        best_tour, avg_time, total_time = solve_tsp(cities, is_agg=True)
+        result['agg'].append({
+            'tour': best_tour, 
+            'avg_time': avg_time, 
+            'total_time': total_time
+        })
 
-        best_tour, avg_time, total_time = solve_tsp(cities, is_agg=True, is_norm=False)
-        result['agg'].append({'tour': best_tour, 'avg_time': avg_time, 'total_time': total_time})
-
-        best_tour, avg_time, total_time = solve_tsp(cities, is_agg=True, is_norm=True)
-        result['agg_norm'].append({'tour': best_tour, 'avg_time': avg_time, 'total_time': total_time})
         pbar.update(1)
     pbar.close()
 

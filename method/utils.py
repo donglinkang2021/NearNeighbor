@@ -9,15 +9,9 @@ __all__ = [
     'calculate_distance_matrix',
     'kmeans',
     'neighbor_aggregation',
-    'softmax',
     'normalize',
     'calc_avg_time',
 ]
-
-def neighbor_aggregation(x:np.ndarray) -> np.ndarray:
-    dist_matrix = cdist(x, x, metric='euclidean')
-    dist_matrix = softmax(dist_matrix, axis=-1)
-    return dist_matrix @ x
 
 def softmax(x:np.ndarray, axis:int=-1) -> np.ndarray:
     exp_x = np.exp(x - np.max(x, axis=axis, keepdims=True))
@@ -27,6 +21,23 @@ def normalize(x:np.ndarray, axis:int=-1, epsilon:float=1e-8) -> np.ndarray:
     mean = x.mean(axis=axis, keepdims=True)
     std = x.std(axis=axis, keepdims=True)
     return (x - mean) / (std + epsilon)
+
+def attention_dist(x:np.ndarray) -> np.ndarray:
+    return x @ x.T
+
+def cosine_dist(cities:np.ndarray) -> np.ndarray:
+    return cdist(cities, cities, metric='cosine')
+
+def euclidean_dist(cities:np.ndarray) -> np.ndarray:
+    return cdist(cities, cities, metric='euclidean')
+
+def neighbor_aggregation(cities:np.ndarray) -> np.ndarray:
+    # note that the input cities should be normalized
+    dist_matrix = attention_dist(cities)
+    weight = softmax(dist_matrix)
+    cities = weight @ cities
+    cities = normalize(cities, 0)
+    return cities
 
 def euclidean_distance(X:np.ndarray, Y:np.ndarray) -> np.ndarray:
     return cdist(X, Y, metric='euclidean')
@@ -40,15 +51,16 @@ def calculate_total_distance(
 def calc_avg_time(
         tour:List[int], 
         distance_matrix:np.ndarray
-    ) -> Tuple[float, float]:
-    arrival_time = {i: 0 for i in range(distance_matrix.shape[0])}
+    ) -> Tuple[float, float, dict]:
+    node_num = distance_matrix.shape[0]
+    arrival_time = {i: 0 for i in range(node_num)}
     total_time = 0
     for i in range(len(tour) - 1):
         start, end = tour[i], tour[i + 1]
         total_time = arrival_time[start] + distance_matrix[start, end]
         arrival_time[end] = total_time
-    avg_time = np.mean(list(arrival_time.values()))
-    return avg_time, total_time
+    avg_time = np.mean([arrival_time[i] for i in range(1, node_num)])
+    return avg_time, total_time, arrival_time
 
 def calculate_distance_matrix(cities: np.ndarray) -> np.ndarray:
     return euclidean_distance(cities, cities)
