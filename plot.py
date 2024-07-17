@@ -160,3 +160,50 @@ def plot_route(cities:np.ndarray, distance_matrix_city:np.ndarray, route:List[in
     plt.savefig(img_name)
     plt.close()
     print(f'{img_name} saved')
+
+# plot 3d cities
+def plot_3d_cities(cities:np.ndarray, title:str):
+    fig = plt.figure(figsize=(20, 20))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(cities[:, 0], cities[:, 1], cities[:, 2])
+    for i, city in enumerate(cities):
+        ax.text(city[0], city[1], city[2], f'{i}', fontsize=12)
+    ax.set_xlabel('X Label')
+    ax.set_ylabel('Y Label')
+    ax.set_zlabel('Z Label')
+    ax.set_title(title)
+    Path("images/3d_cities").mkdir(exist_ok=True)
+    img_name = f'images/3d_cities/{title}.png'
+    plt.savefig(img_name)
+    plt.close()
+    print(f'{img_name} saved')
+
+# plot 3d transform
+def plot_3d_transform(cities:np.ndarray, cities_changed:np.ndarray, title:str):
+    n_city, dim = cities.shape
+    fig = plt.figure(figsize=(20, 20))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(cities[:, 0], cities[:, 1], cities[:, 2])
+    ax.scatter(cities_changed[:, 0], cities_changed[:, 1], cities_changed[:, 2])
+    for i, city in enumerate(cities):
+        ax.text(city[0], city[1], city[2], f'{i}', fontsize=12)
+    for i, city in enumerate(cities_changed):
+        ax.text(city[0], city[1], city[2], f'{i}', fontsize=12)
+    colors = matplotlib.cm.rainbow(np.linspace(0, 1, n_city))
+    for city, city_changed in zip(cities, cities_changed):
+        ax.quiver(
+            city[0], city[1], city[2], 
+            city_changed[0] - city[0], 
+            city_changed[1] - city[1], 
+            city_changed[2] - city[2],
+            color=colors[i]
+        )
+    ax.set_xlabel('X Label')
+    ax.set_ylabel('Y Label')
+    ax.set_zlabel('Z Label')
+    ax.set_title(title)
+    Path("images/3d_transform").mkdir(exist_ok=True)
+    img_name = f'images/3d_transform/{title}.png'
+    plt.savefig(img_name)
+    plt.close()
+    print(f'{img_name} saved')
