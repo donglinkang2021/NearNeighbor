@@ -12,12 +12,9 @@ def plot_tsp_solution(
         total_distance: float,
         method: str,
     ):
-    # 可视化TSP路径
     plt.figure(figsize=(10, 10))
     plt.scatter(cities[:, 0], cities[:, 1], c='red', marker='o')
 
-    # 绘制路径并添加箭头
-    # 同时计算路径长度
     for i in range(len(tour) - 1):
         start, end = tour[i], tour[i + 1]
         plt.arrow(
@@ -27,7 +24,6 @@ def plot_tsp_solution(
             head_width=0.02, length_includes_head=True, color='blue'
         )
 
-    # 显示城市编号
     for i, (x, y) in enumerate(cities):
         plt.text(x, y, str(i), fontsize=12, ha='right')
 
