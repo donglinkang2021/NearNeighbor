@@ -93,6 +93,47 @@ def plot_transform(cities:np.ndarray, cities_changed:np.ndarray, title:str):
     plt.close()
     print(f'{img_name} saved')
 
+def plot_transform_route(cities_list:np.ndarray, title:str):
+    # colors = matplotlib.colormaps['rainbow'] 
+    n_frame, n_city, dim = cities_list.shape
+    colors = matplotlib.cm.rainbow(np.linspace(0, 1, n_city))
+    plt.figure(figsize=(20, 20))
+    for idx in range(n_city):
+        plt.plot(
+            cities_list[:, idx, 0], cities_list[:, idx, 1], 
+            marker='o', color=colors[idx], 
+            label=f'{idx}'
+        )
+
+        for j in range(n_frame - 1):
+            plt.arrow(
+                cities_list[j, idx, 0], cities_list[j, idx, 1],
+                cities_list[j + 1, idx, 0] - cities_list[j, idx, 0],
+                cities_list[j + 1, idx, 1] - cities_list[j, idx, 1],
+                head_width=0.05, 
+                head_length=0.05, 
+                length_includes_head=True, 
+                color=colors[idx]
+            )
+    if n_city < 50:
+        plt.legend(
+            loc='upper left', 
+            bbox_to_anchor=(1, 1), 
+            fontsize='small', 
+            framealpha=0.5, 
+            ncol=2
+        )
+    plt.title(title)
+    # plt.axis('equal')
+    plt.xlabel('X Coordinate')
+    plt.ylabel('Y Coordinate')
+    plt.grid()
+    Path("images/transform_route").mkdir(exist_ok=True)
+    img_name = f'images/transform_route/{title}.png'
+    plt.savefig(img_name, bbox_inches='tight', pad_inches=0.1)
+    plt.close()
+    print(f'{img_name} saved')
+
 def plot_route(cities:np.ndarray, distance_matrix_city:np.ndarray, route:List[int], title:str):
     avg_time, total_time, arrival_time = calc_avg_time(route, distance_matrix_city)
     plt.figure(figsize=(10, 10))

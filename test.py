@@ -1,5 +1,5 @@
 import numpy as np
-from plot import plot_cities, plot_transform, plot_route
+from plot import plot_cities, plot_transform, plot_route, plot_transform_route
 from scipy.spatial.distance import cdist
 from gif import create_gif 
 from method import solve
@@ -32,24 +32,32 @@ def neighbor_aggregation(cities:np.ndarray) -> np.ndarray:
 
 def main():
     # np.random.seed(1234)
-    num_cities = 50
+    num_cities = 500
     cities_origin = np.random.rand(num_cities, 2)
     distance_matrix_origin = euclidean_dist(cities_origin)
 
+    cities_list = []
     cities = cities_origin
-    for i in range(10):
-        cities = normalize(cities, 0)
-        plot_cities(cities, title=f'iter={i}')
+    cities = normalize(cities, 0)
+    cities_list.append(cities)
+    for i in range(3):
+        # plot_cities(cities, title=f'iter={i}')
         transformed_cities = neighbor_aggregation(cities)
-        plot_transform(cities, transformed_cities, title=f'iter={i}')
+        # plot_transform(cities, transformed_cities, title=f'iter={i}')
         cities = transformed_cities
-        distance_matrix = euclidean_dist(cities)
-        best_tour = solve(distance_matrix)
-        plot_route(cities_origin, distance_matrix_origin, best_tour, title=f'iter={i}')
+        cities_list.append(cities)
+        # distance_matrix = euclidean_dist(cities)
+        # best_tour = solve(distance_matrix)
+        # plot_route(cities_origin, distance_matrix_origin, best_tour, title=f'iter={i}')
 
-    create_gif('images/cities')
-    create_gif('images/transform')
-    create_gif('images/route')
+    cities_list = np.array(cities_list)
+    print(cities_list.shape)
+    plot_transform_route(cities_list, title='transform_route')
+    
+
+    # create_gif('images/cities')
+    # create_gif('images/transform')
+    # create_gif('images/route')
 
 if __name__ == '__main__':
     main()
