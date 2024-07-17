@@ -13,8 +13,12 @@
 | ![alt](./images_3d/3d_cities/output.gif) | ![alt](./images_3d/3d_transform/output.gif) |
 
 - 2d
+- the distance calculated by the following method
+  - dot_product (no scaled)
+  - cosine (cdist)
+  - euclidean (cdist)
 
-| class | images_att | images_cos | images_euc |
+| method | dot_product | cosine | euclidean |
 | :---: | :--------: | :--------: | :--------: |
 | cities | ![alt](./images_att/cities/output.gif) | ![alt](./images_cos/cities/output.gif) | ![alt](./images_euc/cities/output.gif) |
 | transform | ![alt](./images_att/transform/output.gif) | ![alt](./images_cos/transform/output.gif) | ![alt](./images_euc/transform/output.gif) |
