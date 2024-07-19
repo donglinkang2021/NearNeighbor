@@ -68,7 +68,7 @@ def calculate_distance_matrix(cities: np.ndarray) -> np.ndarray:
 def kmeans(
         X:np.ndarray, k:int, max_iters:int=100
     ) -> Tuple[np.ndarray, np.ndarray]:
-    """codeboos [n_samples, d_features], code [n_samples,]"""
+    """codebooks [n_samples, d_features], code [n_samples,]"""
     # Randomly initialize k cluster codebooks
     n_samples, d_features = X.shape
     codebooks = X[np.random.choice(n_samples, k, replace=False)]

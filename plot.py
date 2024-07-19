@@ -58,7 +58,8 @@ def plot_cities(cities:np.ndarray, title:str):
     print(f'{img_name} saved')
 
 def plot_transform(cities:np.ndarray, cities_changed:np.ndarray, title:str):
-    colors = matplotlib.colormaps['tab20'] 
+    n_city, dim = cities.shape
+    colors = matplotlib.cm.rainbow(np.linspace(0, 1, n_city))
     plt.figure(figsize=(10, 10))
     plt.scatter(cities[:, 0], cities[:, 1], c='blue', label='cities1', marker='x')
     plt.scatter(cities_changed[:, 0], cities_changed[:, 1], c='red', label='cities2', marker='o')
@@ -75,7 +76,7 @@ def plot_transform(cities:np.ndarray, cities_changed:np.ndarray, title:str):
             head_width=0.03, 
             head_length=0.03, 
             length_includes_head=True, 
-            color=colors(idx)
+            color=colors[idx]
         )
     plt.legend()
     plt.title(title)
@@ -90,7 +91,6 @@ def plot_transform(cities:np.ndarray, cities_changed:np.ndarray, title:str):
     print(f'{img_name} saved')
 
 def plot_transform_route(cities_list:np.ndarray, title:str):
-    # colors = matplotlib.colormaps['rainbow'] 
     n_frame, n_city, dim = cities_list.shape
     colors = matplotlib.cm.rainbow(np.linspace(0, 1, n_city))
     plt.figure(figsize=(20, 20))
